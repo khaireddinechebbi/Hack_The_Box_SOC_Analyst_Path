@@ -39,4 +39,25 @@ index=* EventCode=4624
 aparsa
 ```
 
+# Using Splunk Applications
+## Question 1:
+Access the Sysmon App for Splunk and go to the "Reports" tab. Fix the search associated with the "Net - net view" report and provide the complete executed command as your answer.
+* SPL
+```
+`sysmon` Image=*net.exe (CommandLine="*net  view*") | stats count by Computer,CommandLine
+```
+* Answer
+```text
+net view /DOMAIN:uniwaldo.local
+```
 
+## Question 2:
+Access the Sysmon App for Splunk, go to the "Network Activity" tab, and choose "Network Connections". Fix the search and provide the number of connections that SharpHound.exe has initiated as your answer.
+* SPL
+```
+`sysmon` EventCode=3 Image="*" Protocol="*" DestinationPort="*" | eval Destination=coalesce(dest_host,dest_ip) | stats count, values(DestinationIp) AS "Destinations", values(DestinationPort) AS "Ports", values(Protocol) AS "Protocols" by Image | fields Image Destinations Ports Protocols count
+```
+* Answer
+```text
+6
+```
