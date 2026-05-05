@@ -53,3 +53,31 @@ index="main" sourcetype="WinEventLog:Sysmon" (SourceIp="10.0.0.91" OR SourceIp="
 ```text
 3389
 ```
+
+# Detecting Attacker Behavior With Splunk Based On TTPs
+## Question 1:
+Navigate to http://[Target IP]:8000, open the "Search & Reporting" application, and find through SPL searches against all data the password utilized during the PsExec activity.
+* SPL
+```
+index="main" sourcetype="WinEventLog:Sysmon" Image="*PsExec*" | table _time, CommandLine
+```
+* Answer
+```text
+Password@123
+```
+
+# Detecting Attacker Behavior With Splunk Based On Analytics
+## Question 1:
+Navigate to http://[Target IP]:8000, open the "Search & Reporting" application, and find through an analytics-driven SPL search against all data the source process images that are creating an unusually high number of threads in other processes. Enter the outlier process name as your answer where the number of injected threads is greater than two standard deviations above the average.
+* SPL
+```
+index=* EventCode=8 
+| stats count as count_threads by SourceImage 
+| eventstats avg(count_threads) as avg stdev(count_threads) as stdev 
+| eval isOutlier=if(count_threads > avg+2*stdev, 1, 0) 
+| search isOutlier=1
+```
+* Answer
+```text
+randomfile.exe
+```
