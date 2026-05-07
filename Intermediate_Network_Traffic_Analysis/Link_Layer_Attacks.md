@@ -25,3 +25,19 @@ arp.opcode == 2 && arp.src.proto_ipv4 == 192.168.10.1
 ```
 2c:30:33:e2:d5:c3
 ```
+
+# 802.11 Denial of Service
+## Question 1:
+Inspect the deauthandbadauth.cap file, part of this module's resources, and submit the total count of deauthentication frames as your answer.
+* Filter
+```
+wlan.fc.type_subtype == 0x0c
+```
+* Note
+```
+Go to Statistics → Capture File Properties
+```
+* Answer
+```
+14592
+```
